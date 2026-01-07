@@ -1,43 +1,23 @@
 /**
  * Fees Module - Service Layer
  * Business logic using @across-protocol/sdk
- *
- * NOTE: @across-protocol/sdk has ESM build issues with directory imports
- * that cause crashes on Vercel Node.js runtime. We use dynamic imports
- * as a workaround. This is a known issue with the SDK's ESM bundle.
- * See: https://nodejs.org/api/esm.html#mandatory-file-extensions
  */
 
-import type { ICacheProvider } from "../../shared/cache/index.js";
-import { withSpan, addSpanAttributes } from "../../shared/telemetry/index.js";
+import {
+  constants,
+  relayFeeCalculator,
+  gasPriceOracle,
+  clients,
+} from "@across-protocol/sdk";
+import { getDeployedAddress } from "@across-protocol/contracts";
+import type { ICacheProvider } from "../../shared/cache";
+import { withSpan, addSpanAttributes } from "../../shared/telemetry";
 import type {
   SuggestedFeesQuery,
   SuggestedFeesResponse,
   LimitsQuery,
   LimitsResponse,
-} from "./model.js";
-
-/**
- * Lazy-load SDK to avoid ESM import issues on Vercel
- */
-let sdkPromise: Promise<typeof import("@across-protocol/sdk")> | null = null;
-let contractsPromise: Promise<
-  typeof import("@across-protocol/contracts")
-> | null = null;
-
-async function loadSDK() {
-  if (!sdkPromise) {
-    sdkPromise = import("@across-protocol/sdk");
-  }
-  return sdkPromise;
-}
-
-async function loadContracts() {
-  if (!contractsPromise) {
-    contractsPromise = import("@across-protocol/contracts");
-  }
-  return contractsPromise;
-}
+} from "./model";
 
 /**
  * Service class for fee calculation
@@ -202,52 +182,22 @@ export class FeesService {
 
   /**
    * Validate SDK compatibility - demonstrates we can import and use SDK constants
-   * Uses dynamic imports to work around SDK ESM issues on Vercel
    */
-  async validateSDKCompatibility(): Promise<{
+  validateSDKCompatibility(): {
     sdkVersion: string;
     chainsSupported: number[];
     constantsAvailable: boolean;
-    loadedSuccessfully: boolean;
-  }> {
-    try {
-      // Dynamic import to avoid ESM directory import issues
-      const sdk = await loadSDK();
-      const contracts = await loadContracts();
-
-      console.log("SDK loaded successfully");
-      console.log("constants available:", typeof sdk.constants !== "undefined");
-      console.log(
-        "relayFeeCalculator available:",
-        typeof sdk.relayFeeCalculator !== "undefined"
-      );
-
-      // Try to get deployed address
-      if (contracts.getDeployedAddress) {
-        const deployedAddress = contracts.getDeployedAddress(
-          "SpokePoolPeriphery",
-          10
-        );
-        console.log("deployedAddress:", deployedAddress);
-      }
-
-      return {
-        sdkVersion: "4.3.99",
-        chainsSupported: sdk.constants?.CHAIN_IDs
-          ? Object.keys(sdk.constants.CHAIN_IDs).map(Number)
-          : [1, 10, 137, 42161], // Fallback list
-        constantsAvailable: typeof sdk.constants !== "undefined",
-        loadedSuccessfully: true,
-      };
-    } catch (error) {
-      console.error("SDK load error:", error);
-      // Return mock data if SDK fails to load (e.g., on Vercel)
-      return {
-        sdkVersion: "4.3.99",
-        chainsSupported: [1, 10, 137, 42161, 8453, 59144], // Common chains
-        constantsAvailable: false,
-        loadedSuccessfully: false,
-      };
-    }
+  } {
+    const deployedAddress = getDeployedAddress("SpokePoolPeriphery", 10);
+    console.log("deployedAddress", deployedAddress);
+    const defaultRelayer = relayFeeCalculator.getDefaultRelayer(10);
+    console.log("defaultRelayer", defaultRelayer);
+    console.log("gasPriceOracle", gasPriceOracle);
+    console.log("clients", clients.HubPoolClient);
+    return {
+      sdkVersion: "4.3.99", // Would be from package.json
+      chainsSupported: Object.keys(constants.CHAIN_IDs).map(Number),
+      constantsAvailable: typeof constants !== "undefined",
+    };
   }
 }
