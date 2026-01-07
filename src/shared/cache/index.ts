@@ -2,13 +2,13 @@
  * Cache Module - Exports and Factory
  */
 
-export type { ICacheProvider, CacheConfig } from "./interface";
-export { UpstashCacheProvider } from "./upstash";
-export { MemoryCacheProvider } from "./memory";
+export type { ICacheProvider, CacheConfig } from "./interface.js";
+export { UpstashCacheProvider } from "./upstash.js";
+export { MemoryCacheProvider } from "./memory.js";
 
-import type { ICacheProvider, CacheConfig } from "./interface";
-import { UpstashCacheProvider } from "./upstash";
-import { MemoryCacheProvider } from "./memory";
+import type { ICacheProvider, CacheConfig } from "./interface.js";
+import { UpstashCacheProvider } from "./upstash.js";
+import { MemoryCacheProvider } from "./memory.js";
 
 /**
  * Factory function to create cache provider based on configuration

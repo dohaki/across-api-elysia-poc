@@ -4,7 +4,7 @@
  */
 
 import { Redis } from "@upstash/redis";
-import type { ICacheProvider, CacheConfig } from "./interface";
+import type { ICacheProvider, CacheConfig } from "./interface.js";
 
 export class UpstashCacheProvider implements ICacheProvider {
   private redis: Redis;

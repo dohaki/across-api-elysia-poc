@@ -3,7 +3,7 @@
  * Useful for local development and testing
  */
 
-import type { ICacheProvider } from "./interface";
+import type { ICacheProvider } from "./interface.js";
 
 interface CacheEntry<T = unknown> {
   value: T;

@@ -80,7 +80,16 @@ import type { SuggestedFeesQuery } from "./model.js";
 3. **`src/modules/fees/service.ts`**
    - Fixed 3 imports
 
-**Total**: 10 imports fixed
+4. **`src/shared/cache/index.ts`**
+   - Fixed 6 imports (3 export + 3 import statements)
+
+5. **`src/shared/cache/upstash.ts`**
+   - Fixed 1 import
+
+6. **`src/shared/cache/memory.ts`**
+   - Fixed 1 import
+
+**Total**: 18 imports fixed across 6 files
 
 ## Why This Works
 
