@@ -10,14 +10,14 @@ import {
   clients,
 } from "@across-protocol/sdk";
 import { getDeployedAddress } from "@across-protocol/contracts";
-import type { ICacheProvider } from "../../shared/cache";
-import { withSpan, addSpanAttributes } from "../../shared/telemetry";
+import type { ICacheProvider } from "../../shared/cache/index.js";
+import { withSpan, addSpanAttributes } from "../../shared/telemetry/index.js";
 import type {
   SuggestedFeesQuery,
   SuggestedFeesResponse,
   LimitsQuery,
   LimitsResponse,
-} from "./model";
+} from "./model.js";
 
 /**
  * Service class for fee calculation

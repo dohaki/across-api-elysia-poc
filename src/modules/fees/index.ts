@@ -4,14 +4,14 @@
  */
 
 import { Elysia } from "elysia";
-import { FeesService } from "./service";
+import { FeesService } from "./service.js";
 import {
   SuggestedFeesQueryModel,
   SuggestedFeesResponseModel,
   LimitsQueryModel,
   LimitsResponseModel,
-} from "./model";
-import type { ICacheProvider } from "../../shared/cache";
+} from "./model.js";
+import type { ICacheProvider } from "../../shared/cache/index.js";
 
 /**
  * Create fees module with dependency injection

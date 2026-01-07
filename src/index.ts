@@ -8,10 +8,10 @@ import { swagger } from "@elysiajs/swagger";
 import { cors } from "@elysiajs/cors";
 import { cron } from "@elysiajs/cron";
 
-import { createCacheProviderFromEnv } from "./shared/cache";
-import { initTelemetry } from "./shared/telemetry";
-import { errorHandler } from "./middleware/error-handler";
-import { createFeesModule } from "./modules/fees";
+import { createCacheProviderFromEnv } from "./shared/cache/index.js";
+import { initTelemetry } from "./shared/telemetry/index.js";
+import { errorHandler } from "./middleware/error-handler.js";
+import { createFeesModule } from "./modules/fees/index.js";
 
 // Initialize OpenTelemetry (must be done before creating app)
 initTelemetry("across-api-poc");

@@ -333,6 +333,28 @@ Required secrets in GitHub:
 }
 ```
 
+### Import Error: ERR_UNSUPPORTED_DIR_IMPORT
+
+**Issue**: Function crashes with `Error [ERR_UNSUPPORTED_DIR_IMPORT]: Directory import '/var/task/src/shared/cache' is not supported`
+
+**Cause**: Node.js ES modules require explicit file paths with `.js` extensions
+
+**Solution**: All relative imports must include `/index.js` or `.js`:
+
+```typescript
+// ✅ Correct
+import { something } from "./shared/cache/index.js";
+import { something } from "./module/file.js";
+
+// ❌ Wrong (causes error)
+import { something } from "./shared/cache";
+import { something } from "./module/file";
+```
+
+**This project is already fixed.** If you add new files, ensure imports use `.js` extensions.
+
+See [VERCEL_FIXES.md](./VERCEL_FIXES.md) for detailed explanation.
+
 ### Function Times Out
 
 **Issue**: Function exceeds 60 second timeout
