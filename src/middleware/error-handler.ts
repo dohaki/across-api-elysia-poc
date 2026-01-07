@@ -39,10 +39,13 @@ export class RateLimitError extends APIError {
 
 export function errorHandler(app: Elysia) {
   return app.onError(({ code, error, set }) => {
+    const errorMessage = error instanceof Error ? error.message : String(error);
+    const errorStack = error instanceof Error ? error.stack : undefined;
+    
     console.error("Error:", {
       code,
-      message: error.message,
-      stack: error.stack,
+      message: errorMessage,
+      stack: errorStack,
     });
 
     // Handle validation errors from Elysia
@@ -85,7 +88,7 @@ export function errorHandler(app: Elysia) {
       message:
         process.env.NODE_ENV === "production"
           ? "An unexpected error occurred"
-          : error.message,
+          : errorMessage,
       code: "INTERNAL_ERROR",
     };
   });

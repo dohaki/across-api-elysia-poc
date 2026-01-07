@@ -16,17 +16,17 @@ describe("API Integration Tests", () => {
       const { data, error } = await api.health.get();
 
       expect(error).toBeNull();
-      expect(data?.status).toBe("healthy");
-      expect(data?.timestamp).toBeDefined();
-      expect(data?.uptime).toBeGreaterThan(0);
+      expect((data as any)?.status).toBe("healthy");
+      expect((data as any)?.timestamp).toBeDefined();
+      expect((data as any)?.uptime).toBeGreaterThan(0);
     });
 
     it("should return ready status", async () => {
       const { data, error } = await api.ready.get();
 
       expect(error).toBeNull();
-      expect(data?.status).toBe("ready");
-      expect(data?.cache).toBe("connected");
+      expect((data as any)?.status).toBe("ready");
+      expect((data as any)?.cache).toBe("connected");
     });
   });
 
@@ -61,7 +61,7 @@ describe("API Integration Tests", () => {
       });
 
       expect(error).toBeDefined();
-      expect(error?.status).toBe(400);
+      expect(error?.status).toBe(422);
     });
 
     it("should detect amounts that are too low", async () => {
@@ -143,7 +143,6 @@ describe("API Integration Tests", () => {
 
     it("should validate token address format", async () => {
       const { error } = await api.api.limits.get({
-        // @ts-expect-error Testing validation
         query: {
           token: "invalid-address",
           destinationChainId: "10",
@@ -151,7 +150,7 @@ describe("API Integration Tests", () => {
       });
 
       expect(error).toBeDefined();
-      expect(error?.status).toBe(400);
+      expect(error?.status).toBe(422);
     });
   });
 

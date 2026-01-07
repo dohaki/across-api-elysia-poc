@@ -63,8 +63,8 @@ describe("MemoryCacheProvider", () => {
       { key: "multi2", value: "value2", ttlSeconds: 10 },
     ]);
 
-    expect(await cache.get("multi1")).toBe("value1");
-    expect(await cache.get("multi2")).toBe("value2");
+    expect(await cache.get<string>("multi1")).toBe("value1");
+    expect(await cache.get<string>("multi2")).toBe("value2");
   });
 
   it("should flush all entries", async () => {

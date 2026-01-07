@@ -144,11 +144,9 @@ export function tracingMiddleware() {
       (set as any)._span = span;
     },
 
-    afterHandle({ set, response }: Context) {
+    afterHandle({ set }: Pick<Context, "set">) {
       const span = (set as any)._span as Span | undefined;
       if (span) {
-        const status = response instanceof Response ? response.status : 200;
-        span.setAttribute("http.status_code", status);
         span.setStatus({ code: SpanStatusCode.OK });
         span.end();
       }

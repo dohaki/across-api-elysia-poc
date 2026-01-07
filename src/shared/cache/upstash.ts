@@ -84,8 +84,8 @@ export class UpstashCacheProvider implements ICacheProvider {
   async mget<T = unknown>(keys: string[]): Promise<(T | null)[]> {
     try {
       if (keys.length === 0) return [];
-      const values = await this.redis.mget<T>(...keys);
-      return values;
+      const values = await this.redis.mget<T[]>(...keys);
+      return values as (T | null)[];
     } catch (error) {
       console.error(`Cache MGET error for keys ${keys.join(", ")}:`, error);
       return keys.map(() => null);
