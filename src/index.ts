@@ -67,7 +67,10 @@ All endpoints follow the same contract as the current Vercel API to ensure backw
         },
         tags: [
           { name: "Fees", description: "Fee calculation endpoints" },
-          { name: "Validation", description: "Compatibility validation endpoints" },
+          {
+            name: "Validation",
+            description: "Compatibility validation endpoints",
+          },
           { name: "Health", description: "Health check endpoints" },
         ],
       },
@@ -81,53 +84,64 @@ All endpoints follow the same contract as the current Vercel API to ensure backw
       name: "cache-warmup",
       pattern: "*/5 * * * *", // Every 5 minutes
       run() {
-        console.log("[Cron] Cache warmup executed at", new Date().toISOString());
+        console.log(
+          "[Cron] Cache warmup executed at",
+          new Date().toISOString()
+        );
         // In production, this would warm up frequently accessed cache keys
       },
     })
   )
 
   // Health check endpoint
-  .get("/health", () => ({
-    status: "healthy",
-    timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    cache: cache ? "connected" : "disconnected",
-  }), {
-    detail: {
-      tags: ["Health"],
-      summary: "Health check",
-      description: "Check if the API is healthy",
-    },
-  })
+  .get(
+    "/health",
+    () => ({
+      status: "healthy",
+      timestamp: new Date().toISOString(),
+      uptime: process.uptime(),
+      cache: cache ? "connected" : "disconnected",
+    }),
+    {
+      detail: {
+        tags: ["Health"],
+        summary: "Health check",
+        description: "Check if the API is healthy",
+      },
+    }
+  )
 
   // Ready check endpoint
-  .get("/ready", async () => {
-    // Verify cache is working
-    try {
-      await cache.set("_ready_check", "ok", 10);
-      const value = await cache.get("_ready_check");
+  .get(
+    "/ready",
+    async () => {
+      // Verify cache is working
+      try {
+        await cache.set("_ready_check", "ok", 10);
+        const value = await cache.get("_ready_check");
 
-      return {
-        status: "ready",
-        cache: value === "ok" ? "connected" : "error",
-        timestamp: new Date().toISOString(),
-      };
-    } catch (error) {
-      return {
-        status: "not_ready",
-        cache: "error",
-        error: error instanceof Error ? error.message : "Unknown error",
-        timestamp: new Date().toISOString(),
-      };
-    }
-  }, {
-    detail: {
-      tags: ["Health"],
-      summary: "Readiness check",
-      description: "Check if the API is ready to serve traffic",
+        return {
+          status: "ready",
+          cache: value === "ok" ? "connected" : "error",
+          timestamp: new Date().toISOString(),
+        };
+      } catch (error) {
+        return {
+          status: "not_ready",
+          cache: "error",
+          error: error instanceof Error ? error.message : "Unknown error",
+          timestamp: new Date().toISOString(),
+        };
+      }
     },
-  })
+    {
+      detail: {
+        tags: ["Health"],
+        summary: "Readiness check",
+        description: "Check if the API is ready to serve traffic",
+      },
+    }
+  )
 
   // Mount fees module
   .use(createFeesModule(cache))
