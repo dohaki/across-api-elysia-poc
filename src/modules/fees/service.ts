@@ -17,6 +17,8 @@ import type {
   LimitsResponse,
 } from "./model.js";
 
+import { BigNumber, utils } from "ethers";
+
 /**
  * Lazy-load SDK to avoid ESM import issues on Vercel
  */
@@ -211,6 +213,9 @@ export class FeesService {
     loadedSuccessfully: boolean;
   }> {
     try {
+      const amount = utils.parseUnits("1", 6);
+      console.log("amount:", amount.toString());
+
       // Dynamic import to avoid ESM directory import issues
       const sdk = await loadSDK();
       const contracts = await loadContracts();
