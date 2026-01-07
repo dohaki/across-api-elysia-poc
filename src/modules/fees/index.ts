@@ -57,14 +57,14 @@ export function createFeesModule(cache: ICacheProvider) {
     )
     .get(
       "/sdk-validation",
-      () => {
-        return feesService.validateSDKCompatibility();
+      async () => {
+        return await feesService.validateSDKCompatibility();
       },
       {
         detail: {
           tags: ["Validation"],
           summary: "Validate SDK compatibility",
-          description: "Test endpoint to validate @across-protocol/sdk works with ElysiaJS",
+          description: "Test endpoint to validate @across-protocol/sdk works with ElysiaJS. Uses dynamic imports to work around SDK ESM issues.",
         },
       }
     );

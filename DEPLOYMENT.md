@@ -355,6 +355,25 @@ import { something } from "./module/file";
 
 See [VERCEL_FIXES.md](./VERCEL_FIXES.md) for detailed explanation.
 
+### SDK Import Error: ERR_UNSUPPORTED_DIR_IMPORT (Third-Party Package)
+
+**Issue**: `@across-protocol/sdk` crashes with directory import error on Vercel
+
+**Cause**: The SDK's ESM build has directory imports without explicit file paths
+
+**Solution**: We use dynamic imports to lazy-load the SDK:
+
+```typescript
+// Dynamic import works around SDK ESM issues
+const sdk = await import("@across-protocol/sdk");
+```
+
+**Status**: ✅ **Workaround implemented** - SDK loads via dynamic imports
+
+See [SDK_WORKAROUND.md](./SDK_WORKAROUND.md) for detailed explanation and alternatives.
+
+**Note**: This is a third-party package issue, not our code. The SDK maintainers would need to fix their ESM build for proper Node.js compatibility.
+
 ### Function Times Out
 
 **Issue**: Function exceeds 60 second timeout

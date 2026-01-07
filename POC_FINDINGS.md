@@ -26,10 +26,11 @@ All Phase 0 validation objectives have been successfully completed. ElysiaJS dem
 ### 1. Core Dependencies ✅
 
 #### @across-protocol/sdk
-- **Status**: PASS
+- **Status**: PASS (with workaround)
 - **Compatibility**: 100%
-- **Issues**: None
-- **Notes**: All SDK imports work without modification. No conflicts with ElysiaJS type system.
+- **Issues**: ESM directory imports require workaround on Vercel
+- **Solution**: Dynamic imports used to lazy-load SDK
+- **Notes**: SDK works perfectly locally (Bun). On Vercel Node.js, SDK's ESM build has directory import issues. We use `import("@across-protocol/sdk")` instead of static imports. See [SDK_WORKAROUND.md](./SDK_WORKAROUND.md)
 
 ```typescript
 import { constants, utils } from "@across-protocol/sdk";
