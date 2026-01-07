@@ -1,0 +1,12 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "buildCommand": "bun install --ignore-scripts",
+  "installCommand": "bun install --ignore-scripts",
+  "functions": {
+    "src/index.ts": {
+      "runtime": "nodejs",
+      "maxDuration": 60,
+      "memory": 1024
+    }
+  }
+}

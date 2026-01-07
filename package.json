@@ -1,0 +1,45 @@
+{
+  "name": "across-api-poc",
+  "version": "0.1.0",
+  "description": "Phase 0 PoC - ElysiaJS compatibility validation with Across Protocol dependencies",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --hot src/index.ts",
+    "dev:node": "NODE_ENV=development node --watch --loader tsx src/adapters/node.ts",
+    "dev:vercel": "vercel dev",
+    "build": "bun build src/index.ts --outdir ./dist --target bun",
+    "start": "bun src/index.ts",
+    "deploy": "vercel deploy",
+    "deploy:prod": "vercel deploy --prod",
+    "test": "bun test",
+    "test:watch": "bun test --watch",
+    "test:coverage": "bun test --coverage",
+    "validate": "bun scripts/validate-poc.ts",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "elysia": "^1.2.0",
+    "@elysiajs/swagger": "^1.2.0",
+    "@elysiajs/cors": "^1.2.0",
+    "@elysiajs/cron": "^1.2.0",
+    "@sinclair/typebox": "^0.33.15",
+    "openapi-types": "^12.1.3",
+    "@across-protocol/sdk": "^4.3.99",
+    "@across-protocol/contracts": "^4.1.17-beta.4",
+    "ethers": "5.7.2",
+    "viem": "^2.21.45",
+    "@upstash/redis": "^1.34.3",
+    "@opentelemetry/api": "^1.9.0",
+    "@opentelemetry/sdk-node": "^0.54.2",
+    "@opentelemetry/auto-instrumentations-node": "^0.50.0",
+    "@opentelemetry/exporter-trace-otlp-http": "^0.54.2",
+    "@opentelemetry/resources": "^1.28.0",
+    "@opentelemetry/semantic-conventions": "^1.28.0"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "@elysiajs/eden": "^1.2.0",
+    "typescript": "^5.6.3",
+    "tsx": "^4.19.2"
+  }
+}
