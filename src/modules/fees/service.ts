@@ -18,6 +18,17 @@ import type {
 } from "./model.js";
 
 import { BigNumber, utils } from "ethers";
+import {
+  constants,
+  relayFeeCalculator,
+  gasPriceOracle,
+  clients,
+} from "@across-protocol/sdk";
+
+console.log("constants:", constants);
+console.log("relayFeeCalculator:", relayFeeCalculator);
+console.log("gasPriceOracle:", gasPriceOracle);
+console.log("clients:", clients);
 
 /**
  * Lazy-load SDK to avoid ESM import issues on Vercel

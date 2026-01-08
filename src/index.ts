@@ -7,6 +7,7 @@ import { Elysia } from "elysia";
 import { swagger } from "@elysiajs/swagger";
 import { cors } from "@elysiajs/cors";
 import { cron } from "@elysiajs/cron";
+import { node } from "@elysiajs/node";
 
 import { createCacheProviderFromEnv } from "./shared/cache/index.js";
 import { initTelemetry } from "./shared/telemetry/index.js";
@@ -22,7 +23,7 @@ const cache = createCacheProviderFromEnv();
 /**
  * Create ElysiaJS application
  */
-export const app = new Elysia()
+export const app = new Elysia({ adapter: node() })
   // Error handling
   .use(errorHandler)
 
