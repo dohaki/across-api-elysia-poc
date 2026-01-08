@@ -3,8 +3,7 @@
     "target": "ES2022",
     "module": "ESNext",
     "lib": ["ES2022"],
-    "moduleResolution": "bundler",
-    "types": ["bun-types"],
+    "moduleResolution": "node",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
@@ -14,6 +13,7 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
+    "allowSyntheticDefaultImports": true,
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {

@@ -167,29 +167,3 @@ export type App = typeof app;
 // Default export for Vercel deployment
 // Vercel will use this export and automatically handle the request lifecycle
 export default app;
-
-// Start server if running directly with Bun/Node (not on Vercel)
-// Vercel doesn't use this - it directly uses the default export
-if (import.meta.main) {
-  const port = process.env.PORT || 3000;
-
-  app.listen(port, () => {
-    console.log(`
-🚀 Across API PoC is running!
-
-  Runtime: ${typeof Bun !== "undefined" ? "Bun" : "Node.js"}
-  Port: ${port}
-  Environment: ${process.env.NODE_ENV || "development"}
-  Cache: ${process.env.CACHE_PROVIDER || "memory"}
-
-📚 Swagger Docs: http://localhost:${port}/swagger
-🏥 Health Check: http://localhost:${port}/health
-✅ Ready Check: http://localhost:${port}/ready
-
-🧪 Test Endpoints:
-  - GET http://localhost:${port}/api/suggested-fees?amount=1000000&inputToken=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&outputToken=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&destinationChainId=10
-  - GET http://localhost:${port}/api/limits?token=0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48&destinationChainId=10
-  - GET http://localhost:${port}/api/sdk-validation
-    `);
-  });
-}
