@@ -4,10 +4,10 @@
  */
 
 import { Elysia } from "elysia";
-import { swagger } from "@elysiajs/swagger";
 import { cors } from "@elysiajs/cors";
 import { cron } from "@elysiajs/cron";
 import { node } from "@elysiajs/node";
+import { openapi } from "@elysiajs/openapi";
 
 import { createCacheProviderFromEnv } from "./shared/cache/index.js";
 import { initTelemetry } from "./shared/telemetry/index.js";
@@ -35,49 +35,8 @@ export const app = new Elysia({ adapter: node() })
     })
   )
 
-  // Swagger/OpenAPI documentation
-  .use(
-    swagger({
-      documentation: {
-        info: {
-          title: "Across Protocol API - PoC",
-          version: "0.1.0",
-          description: `
-# Across Protocol API - ElysiaJS PoC
-
-This is a Phase 0 proof of concept demonstrating ElysiaJS compatibility with:
-- @across-protocol/sdk
-- @across-protocol/contracts
-- Upstash Redis / Cache abstraction
-- OpenTelemetry instrumentation
-- Multi-cloud deployment (Vercel, Node.js, Bun)
-
-## Features Validated
-
-✅ ElysiaJS + Across SDK compatibility
-✅ Automatic TypeScript type inference
-✅ OpenAPI documentation generation
-✅ Cache provider abstraction
-✅ OpenTelemetry distributed tracing
-✅ Vercel deployment adapter
-
-## Endpoints
-
-All endpoints follow the same contract as the current Vercel API to ensure backwards compatibility.
-          `,
-        },
-        tags: [
-          { name: "Fees", description: "Fee calculation endpoints" },
-          {
-            name: "Validation",
-            description: "Compatibility validation endpoints",
-          },
-          { name: "Health", description: "Health check endpoints" },
-        ],
-      },
-      path: "/swagger",
-    })
-  )
+  // OpenAPI documentation
+  .use(openapi())
 
   // Example cron job (validates @elysiajs/cron plugin)
   .use(
