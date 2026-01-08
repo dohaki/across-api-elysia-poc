@@ -12,6 +12,7 @@ coverage/
 dist/
 dist-node/
 dist-bun/
+dist-vercel/
 
 # Misc
 .DS_Store
