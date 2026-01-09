@@ -6,9 +6,9 @@
   "scripts": {
     "dev": "bun --hot src/adapters/bun.ts",
     "dev:node": "tsx watch src/adapters/node.ts",
-    "build": "bun build src/adapters/bun.ts --outdir ./dist-bun --target bun",
+    "build": "bun run build:node",
     "build:node": "tsdown",
-    "start": "bun src/adapters/bun.ts",
+    "start": "NODE_ENV=production bun ./src/adapters/bun.ts",
     "start:node": "NODE_ENV=production node ./dist-node/node.mjs",
     "deploy": "vercel deploy",
     "deploy:prod": "vercel deploy --prod",
