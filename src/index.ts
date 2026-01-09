@@ -5,10 +5,9 @@
 
 import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
-import { cron } from "@elysiajs/cron";
 import { node } from "@elysiajs/node";
 import { openapi } from "@elysiajs/openapi";
-
+import { cron } from "@elysiajs/cron";
 import { createCacheProviderFromEnv } from "./shared/cache/index.js";
 import { initTelemetry } from "./shared/telemetry/index.js";
 import { errorHandler } from "./middleware/error-handler.js";
@@ -37,21 +36,6 @@ export const app = new Elysia({ adapter: node() })
 
   // OpenAPI documentation
   .use(openapi())
-
-  // Example cron job (validates @elysiajs/cron plugin)
-  .use(
-    cron({
-      name: "cache-warmup",
-      pattern: "*/5 * * * *", // Every 5 minutes
-      run() {
-        console.log(
-          "[Cron] Cache warmup executed at",
-          new Date().toISOString()
-        );
-        // In production, this would warm up frequently accessed cache keys
-      },
-    })
-  )
 
   // Health check endpoint
   .get(
@@ -119,6 +103,16 @@ export const app = new Elysia({ adapter: node() })
       sdkValidation: "/api/sdk-validation",
     },
   }));
+
+export const appWithCronJobs = app.use(
+  cron({
+    name: "cache-warmup",
+    pattern: "*/1 * * * *", // Every 1 minute
+    run() {
+      console.log("[Cron] Cache warmup executed at", new Date().toISOString());
+    },
+  })
+);
 
 // Export TypeScript type for Eden client
 export type App = typeof app;

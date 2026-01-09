@@ -3,12 +3,12 @@
  * Run ElysiaJS app as a standard Node.js HTTP server
  */
 
-import { app } from "../index";
+import { appWithCronJobs } from "../index";
 
 const port = process.env.PORT || 3000;
 
 // Create a Node.js HTTP server from Elysia app
-app.listen(port, () => {
+appWithCronJobs.listen(port, () => {
   console.log(`
 🚀 Across API PoC running on Node.js
 
