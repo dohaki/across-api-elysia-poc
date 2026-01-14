@@ -19,8 +19,8 @@
     "type-check": "tsc --noEmit"
   },
   "dependencies": {
-    "@across-protocol/contracts": "^4.1.17-beta.4",
-    "@across-protocol/sdk": "^4.3.99",
+    "@across-protocol/contracts": "^4.1.20",
+    "@across-protocol/sdk": "^4.3.111",
     "@elysiajs/cors": "^1.4.1",
     "@elysiajs/cron": "^1.4.1",
     "@elysiajs/node": "^1.4.3",

@@ -17,40 +17,13 @@ import type {
   LimitsResponse,
 } from "./model.js";
 
-import { BigNumber, utils } from "ethers";
+import { utils } from "ethers";
 import {
   constants,
   relayFeeCalculator,
-  gasPriceOracle,
-  clients,
+  utils as sdkUtils,
 } from "@across-protocol/sdk";
-
-console.log("constants:", constants);
-console.log("relayFeeCalculator:", relayFeeCalculator);
-console.log("gasPriceOracle:", gasPriceOracle);
-console.log("clients:", clients);
-
-/**
- * Lazy-load SDK to avoid ESM import issues on Vercel
- */
-let sdkPromise: Promise<typeof import("@across-protocol/sdk")> | null = null;
-let contractsPromise: Promise<
-  typeof import("@across-protocol/contracts")
-> | null = null;
-
-async function loadSDK() {
-  if (!sdkPromise) {
-    sdkPromise = import("@across-protocol/sdk");
-  }
-  return sdkPromise;
-}
-
-async function loadContracts() {
-  if (!contractsPromise) {
-    contractsPromise = import("@across-protocol/contracts");
-  }
-  return contractsPromise;
-}
+import { getDeployedAddress } from "@across-protocol/contracts";
 
 /**
  * Service class for fee calculation
@@ -217,53 +190,34 @@ export class FeesService {
    * Validate SDK compatibility - demonstrates we can import and use SDK constants
    * Uses dynamic imports to work around SDK ESM issues on Vercel
    */
-  async validateSDKCompatibility(): Promise<{
-    sdkVersion: string;
-    chainsSupported: number[];
-    constantsAvailable: boolean;
-    loadedSuccessfully: boolean;
-  }> {
+  async validateSDKCompatibility() {
     try {
       const amount = utils.parseUnits("1", 6);
       console.log("amount:", amount.toString());
 
-      // Dynamic import to avoid ESM directory import issues
-      const sdk = await loadSDK();
-      const contracts = await loadContracts();
-
       console.log("SDK loaded successfully");
-      console.log("constants available:", typeof sdk.constants !== "undefined");
       console.log(
         "relayFeeCalculator available:",
-        typeof sdk.relayFeeCalculator !== "undefined"
+        typeof relayFeeCalculator !== "undefined"
       );
 
       // Try to get deployed address
-      if (contracts.getDeployedAddress) {
-        const deployedAddress = contracts.getDeployedAddress(
-          "SpokePoolPeriphery",
-          10
-        );
-        console.log("deployedAddress:", deployedAddress);
-      }
+      const deployedAddress = getDeployedAddress("SpokePoolPeriphery", 10);
+      console.log("deployedAddress:", deployedAddress);
+
+      // sdkUtils
+      console.log("sdkUtils available:", typeof sdkUtils !== "undefined");
 
       return {
         sdkVersion: "4.3.99",
-        chainsSupported: sdk.constants?.CHAIN_IDs
-          ? Object.keys(sdk.constants.CHAIN_IDs).map(Number)
-          : [1, 10, 137, 42161], // Fallback list
-        constantsAvailable: typeof sdk.constants !== "undefined",
+        chainsSupported: Object.keys(constants.CHAIN_IDs).length,
+        constantsAvailable: typeof constants !== "undefined",
         loadedSuccessfully: true,
+        sdkUtilsAvailable: typeof sdkUtils !== "undefined",
       };
     } catch (error) {
       console.error("SDK load error:", error);
-      // Return mock data if SDK fails to load (e.g., on Vercel)
-      return {
-        sdkVersion: "4.3.99",
-        chainsSupported: [1, 10, 137, 42161, 8453, 59144], // Common chains
-        constantsAvailable: false,
-        loadedSuccessfully: false,
-      };
+      throw error;
     }
   }
 }
